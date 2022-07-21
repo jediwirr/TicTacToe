@@ -1,28 +1,33 @@
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class GameProcess {
-    private HashMap<String, Integer> position = new HashMap<String, Integer>();
+    Position position = new Position();
+    Player player = new Player();
+    CPU CPU = new CPU();
+    GameBoard gameBoard = new GameBoard();
+    private boolean waitForPlayer = true;
 
     public void run() {
-        setPosition("x");
-        setPosition("y");
-        GameBoard gameBoard = new GameBoard();
-        gameBoard.print(position);
+        player.setPlayerSymbol();
+        CPU.setCPUSymbol(player.symbol);
+        nextMove();
+        nextMove();
     }
 
-    private void setPosition(String axis) {
-        String[] allowedPositions = {"1", "3", "5"};
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(axis + "-axis: ");
-        String value = scanner.nextLine();
-
-        if (Arrays.asList(allowedPositions).contains(value)) {
-            position.put(axis, Integer.parseInt(value));
+    private void nextMove() {
+        if (waitForPlayer) {
+            position.setByPlayer("x");
+            position.setByPlayer("y");
+            gameBoard.print(position, player.symbol);
+            waitForPlayer = false;
         } else {
-            System.out.println("Position is not allowed. Choose one of: 1, 3, 5");
-            setPosition(axis);
+            HashMap CPUPosition = CPU.getPosition(position.get());
+            int x = (int) CPUPosition.get("x");
+            int y = (int) CPUPosition.get("y");
+            position.setByCPU("x", x);
+            position.setByCPU("y", y);
+            gameBoard.print(position, CPU.symbol);
+            waitForPlayer = true;
         }
     }
 }

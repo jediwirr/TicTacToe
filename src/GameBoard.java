@@ -1,7 +1,5 @@
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 public class GameBoard {
     private String[][] gameBoard = {{"   ", "|", "   ", "|", "   "},
             {"---", "+", "---", "+", "---"},
@@ -9,10 +7,10 @@ public class GameBoard {
             {"---", "+", "---", "+", "---"},
             {"   ", "|", "   ", "|", "   "}};
 
-    public void print(@NotNull HashMap position) {
-        int x = (int) position.get("x");
-        int y = (int) position.get("y");
-        gameBoard[x - 1][y - 1] = " X ";
+    public void print(@NotNull Position position, String symbol) {
+        int x = position.getAxisPoint("x");
+        int y = position.getAxisPoint("y");
+        gameBoard[x][y] = " " + symbol + " ";
 
         System.out.println();
 
